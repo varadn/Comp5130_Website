@@ -1,7 +1,12 @@
-// import Image from "next/image";
+import PageLayout from "@/components/PageLayout";
 
-export default function Page() {
+export default function About() {
   return (
-    <div>Test</div>
+    <PageLayout>
+      <h1 className="text-2xl font-bold mb-4">About</h1>
+      <p className="text-gray-700">
+        This tool analyzes Magic: The Gathering decks.
+      </p>
+    </PageLayout>
   );
 }
