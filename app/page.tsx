@@ -1,17 +1,19 @@
-'use client'
+"use client";
 
-import Image from "next/image";
-import Link from 'next/link';
+import React from "react";
+// import Image from "next/image";
+// import Link from 'next/link';
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 
 export default function Home() {
-
   const [deckInput, setDeckInput] = useState("");
   const [results, setResults] = useState<string | null>(null);
 
   const handleAnalyze = () => {
-    const cardCount = deckInput.split("\n").filter(line => line.trim() !== "").length;
+    const cardCount = deckInput
+      .split("\n")
+      .filter((line) => line.trim() !== "").length;
     setResults(`Deck has ${cardCount} cards.`);
   };
 
