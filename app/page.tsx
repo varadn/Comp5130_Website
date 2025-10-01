@@ -97,11 +97,11 @@ export default function Home() {
       setResults(
         <div>
           <p>
-            Deck has ${totalCards} cards. Found ${gamechangers.length}{" "}
+            Deck has {totalCards} cards. Found {gamechangers.length}{" "}
             gamechangers.
           </p>
-          <p>Mana breakdown: ${manaBreakdown}</p>
-          <p>Mana curve: ${curveBreakdown}</p>
+          <p>Mana breakdown: {manaBreakdown}</p>
+          <p>Mana curve: {curveBreakdown}</p>
         </div>
       );
     } catch (err) {
