@@ -10,11 +10,43 @@ export default function Home() {
   const [deckInput, setDeckInput] = useState("");
   const [results, setResults] = useState<string | null>(null);
 
-  const handleAnalyze = () => {
-    const cardCount = deckInput
+  const parseDeck = (deck: string) => {
+    return deck
       .split("\n")
-      .filter((line) => line.trim() !== "").length;
-    setResults(`Deck has ${cardCount} cards.`);
+      .map((line) => line.trim())
+      .filter((line) => line !== "")
+      .map((line) => {
+        const match = line.match(/^(\d+)\s+(.*)$/);
+        return match
+          ? { qty: parseInt(match[1]), name: match[2] }
+          : { qty: 1, name: line };
+      });
+  };
+
+  const fetchCardData = async (name: string) => {
+    const response = await fetch(
+      `https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(name)}`
+    );
+    if (!response.ok) throw new Error(`Card not found: ${name}`);
+    return response.json();
+  };
+
+  const handleAnalyze = async () => {
+    const parsed = parseDeck(deckInput);
+
+    try {
+      const cards = await Promise.all(parsed.map((c) => fetchCardData(c.name)));
+      const totalCards = parsed.reduce((sum, c) => sum + c.qty, 0);
+      const gamechangers = cards.filter((card) =>
+        card.keywords?.includes("Gamechanger")
+      );
+
+      setResults(
+        `Deck has ${totalCards} cards. Found ${gamechangers.length} gamechangers.`
+      );
+    } catch (err) {
+      setResults(`Error analyzing deck: ${(err as Error).message}`);
+    }
   };
 
   return (
