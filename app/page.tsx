@@ -8,7 +8,7 @@ import PageLayout from "@/components/PageLayout";
 
 export default function Home() {
   const [deckInput, setDeckInput] = useState("");
-  const [results, setResults] = useState<string | null>(null);
+  const [results, setResults] = useState<React.JSX.Element | null>(null);
 
   const parseDeck = (deck: string) => {
     return deck
@@ -69,11 +69,43 @@ export default function Home() {
               .join(", ")
           : "No colored mana symbols found.";
 
+      const curve: Record<string, number> = {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6+": 0,
+      };
+
+      parsed.forEach((c, i) => {
+        if (cards[i].type_line && cards[i].type_line.includes("Land")) return;
+        const cmc = Math.round(cards[i].cmc ?? 0);
+
+        if (cmc >= 6) {
+          curve["6+"] += c.qty;
+        } else {
+          curve[cmc.toString()] += c.qty;
+        }
+      });
+
+      const curveBreakdown = Object.entries(curve)
+        .map(([cost, count]) => `${cost}: ${count}`)
+        .join(", ");
+
       setResults(
-        `Deck has ${totalCards} cards. Found ${gamechangers.length} gamechangers.\n Mana breakdown: ${manaBreakdown}`
+        <div>
+          <p>
+            Deck has ${totalCards} cards. Found ${gamechangers.length}{" "}
+            gamechangers.
+          </p>
+          <p>Mana breakdown: ${manaBreakdown}</p>
+          <p>Mana curve: ${curveBreakdown}</p>
+        </div>
       );
     } catch (err) {
-      setResults(`Error analyzing deck: ${(err as Error).message}`);
+      setResults(<p>Error analyzing deck: ${(err as Error).message}</p>);
     }
   };
 
