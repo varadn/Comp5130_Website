@@ -31,6 +31,20 @@ export default function Home() {
     return response.json();
   };
 
+  const countManaSymbols = (
+    manaCost: string,
+    qty: number,
+    counts: Record<string, number>
+  ) => {
+    const symbols = manaCost.match(/\{.*?\}/g) || [];
+    symbols.forEach((sym) => {
+      const clean = sym.replace(/[{}]/g, "");
+      if (["W", "U", "B", "R", "G", "C"].includes(clean)) {
+        counts[clean] = (counts[clean] || 0) + qty;
+      }
+    });
+  };
+
   const handleAnalyze = async () => {
     const parsed = parseDeck(deckInput);
 
@@ -41,8 +55,22 @@ export default function Home() {
         card.keywords?.includes("Gamechanger")
       );
 
+      const manaCounts: Record<string, number> = {};
+      parsed.forEach((c, i) => {
+        if (cards[i].mana_cost) {
+          countManaSymbols(cards[i].mana_cost, c.qty, manaCounts);
+        }
+      });
+
+      const manaBreakdown =
+        Object.entries(manaCounts).length > 0
+          ? Object.entries(manaCounts)
+              .map(([color, count]) => `${color}: ${count}`)
+              .join(", ")
+          : "No colored mana symbols found.";
+
       setResults(
-        `Deck has ${totalCards} cards. Found ${gamechangers.length} gamechangers.`
+        `Deck has ${totalCards} cards. Found ${gamechangers.length} gamechangers.\n Mana breakdown: ${manaBreakdown}`
       );
     } catch (err) {
       setResults(`Error analyzing deck: ${(err as Error).message}`);
