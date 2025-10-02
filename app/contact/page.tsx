@@ -67,8 +67,8 @@ export default function Contact() {
           </button>
         </form>
       ) : (
-        <div className="bg-green-100 text-green-800 p-4 rounded-lg shadow-sm">
-          Thank you for reaching out!
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-fade-in">
+          <p className="font-bold">Thank you for reaching out!</p>
         </div>
       )}
     </PageLayout>
