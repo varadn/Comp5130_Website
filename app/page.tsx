@@ -90,22 +90,78 @@ export default function Home() {
         }
       });
 
-      const curveBreakdown = Object.entries(curve)
-        .map(([cost, count]) => `${cost}: ${count}`)
-        .join(", ");
-
       setResults(
-        <div>
-          <p>
-            Deck has {totalCards} cards. Found {gamechangers.length}{" "}
-            gamechangers.
+        <div className="flex flex-col items-center text-center w-full">
+          <p
+            className="opacity-0 animate-fade-in text-base mb-2"
+            style={{
+              animation: `fadeIn 0.6s ease forwards`,
+              animationDelay: `0s`,
+            }}
+          >
+            Deck has <span className="font-bold">{totalCards}</span> cards.
+            Found <span className="font-bold">{gamechangers.length}</span> game
+            changers.
           </p>
-          <p>Mana breakdown: {manaBreakdown}</p>
-          <p>Mana curve: {curveBreakdown}</p>
+          <p
+            className="opacity-0 animate-fade-in text-base mb-2"
+            style={{
+              animation: `fadeIn 0.6s ease forwards`,
+              animationDelay: `0.2s`,
+            }}
+          >
+            Mana breakdown: {manaBreakdown}
+          </p>
+          <div
+            className="opacity-0 animate-fade-in mb-4"
+            style={{
+              animation: `fadeIn 0.6s ease forwards`,
+              animationDelay: `0.4s`,
+            }}
+          >
+            <span className="block text-base font-semibold mb-2">
+              Mana Curve:
+            </span>
+            <div className="flex items-end space-x-2 h-32 min-h-[12rem]">
+              {(() => {
+                const counts = Object.values(curve);
+                const maxCount = Math.max(...counts);
+                const maxBarHeight = 128;
+                return Object.entries(curve).map(([cost, count]) => {
+                  const barHeight = maxCount
+                    ? Math.max((count / maxCount) * maxBarHeight, 6)
+                    : 6;
+                  return (
+                    <div key={cost} className="flex flex-col items-center">
+                      <span className="text-xs text-gray-600 mb-2">
+                        {count}
+                      </span>
+                      <div
+                        className="bg-blue-500 rounded w-8 mt-1"
+                        style={{ height: `${barHeight}px` }}
+                      ></div>
+                      <span className="text-xs mt-2">{cost}</span>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          </div>
+          <style>{`
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: none; }
+            }
+          `}</style>
         </div>
       );
     } catch (err) {
-      setResults(<p>Error analyzing deck: ${(err as Error).message}</p>);
+      setResults(
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in">
+          <strong className="font-bold">Error:</strong>
+          <span className="block sm:inline ml-2">{(err as Error).message}</span>
+        </div>
+      );
     }
   };
 
@@ -131,7 +187,7 @@ export default function Home() {
         {results && (
           <div className="mt-6 w-full bg-gray-100 text-black p-4 rounded-lg shadow-sm">
             <h2 className="text-xl font-semibold mb-2">Results</h2>
-            <p>{results}</p>
+            {results}
           </div>
         )}
       </main>
