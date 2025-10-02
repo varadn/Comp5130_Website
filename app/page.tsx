@@ -172,7 +172,7 @@ export default function Home() {
 
         <textarea
           className="w-full h-64 p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Paste around 100 cards here, one per line..."
+          placeholder="Paste around 100 cards here, one per line Format: [number] Card Name..."
           value={deckInput}
           onChange={(e) => setDeckInput(e.target.value)}
         />
