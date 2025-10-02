@@ -12,3 +12,6 @@ const eslintConfig = [
 ];
 
 export default eslintConfig;
+
+// Taken from Next.js ESLint config documentation
+// https://nextjs.org/docs/basic-features/eslint#customizing-eslint-configuration
