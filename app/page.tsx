@@ -147,12 +147,6 @@ export default function Home() {
               })()}
             </div>
           </div>
-          <style>{`
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(10px); }
-              to { opacity: 1; transform: none; }
-            }
-          `}</style>
         </div>
       );
     } catch (err) {
@@ -167,10 +161,22 @@ export default function Home() {
 
   return (
     <PageLayout>
-      <main className="flex-1 flex flex-col items-center justify-start p-8 w-full max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Paste Your Decklist</h1>
+      <main
+        role="main"
+        className="flex-1 flex flex-col items-center justify-start p-8 w-full max-w-3xl mx-auto"
+      >
+        <h1
+          id="home-heading"
+          role="heading"
+          aria-level={1}
+          className="text-3xl font-bold mb-6"
+        >
+          Paste Your Decklist
+        </h1>
 
         <textarea
+          id="deck-input"
+          aria-label="Decklist input; paste one card per line with optional quantity"
           className="w-full h-64 p-4 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Paste around 100 cards here, one per line Format: [number] Card Name..."
           value={deckInput}
@@ -180,13 +186,22 @@ export default function Home() {
         <button
           className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
           onClick={handleAnalyze}
+          aria-controls="analysis-results"
         >
           Analyze Deck
         </button>
 
         {results && (
-          <div className="mt-6 w-full bg-gray-100 text-black p-4 rounded-lg shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">Results</h2>
+          <div
+            id="analysis-results"
+            role="region"
+            aria-labelledby="results-heading"
+            aria-live="polite"
+            className="mt-6 w-full bg-gray-100 text-black p-4 rounded-lg shadow-sm"
+          >
+            <h2 id="results-heading" className="text-xl font-semibold mb-2">
+              Results
+            </h2>
             {results}
           </div>
         )}
