@@ -122,7 +122,11 @@ export default function Home() {
             <span className="block text-base font-semibold mb-2">
               Mana Curve:
             </span>
-            <div className="flex items-end space-x-2 h-32 min-h-[12rem]">
+            <div
+              role="list"
+              aria-label="Mana curve bars"
+              className="flex items-end space-x-2 h-32 min-h-[12rem]"
+            >
               {(() => {
                 const counts = Object.values(curve);
                 const maxCount = Math.max(...counts);
@@ -132,7 +136,12 @@ export default function Home() {
                     ? Math.max((count / maxCount) * maxBarHeight, 6)
                     : 6;
                   return (
-                    <div key={cost} className="flex flex-col items-center">
+                    <div
+                      key={cost}
+                      role="listitem"
+                      aria-label={`${cost} mana: ${count} cards`}
+                      className="flex flex-col items-center"
+                    >
                       <span className="text-xs text-gray-600 mb-2">
                         {count}
                       </span>
@@ -151,7 +160,11 @@ export default function Home() {
       );
     } catch (err) {
       setResults(
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in"
+        >
           <strong className="font-bold">Error:</strong>
           <span className="block sm:inline ml-2">{(err as Error).message}</span>
         </div>
